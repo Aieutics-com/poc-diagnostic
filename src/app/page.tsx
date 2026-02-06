@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -9,9 +10,13 @@ export default function Home() {
       {/* Header */}
       <header className="px-6 py-6 md:px-12">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <span className="font-[family-name:var(--font-heading)] text-lg font-bold tracking-tight">
-            aieutics
-          </span>
+          <Image
+            src="/aieutics_transparentbg_logo.png"
+            alt="Aieutics"
+            width={80}
+            height={80}
+            className="h-20 w-auto"
+          />
           <span className="font-[family-name:var(--font-body)] text-sm text-[var(--color-grey)] italic hidden sm:inline">
             See further. Think deeper. Break through.
           </span>
@@ -55,7 +60,7 @@ export default function Home() {
           >
             <Link
               href="/diagnostic"
-              className="inline-block bg-[var(--color-orange)] text-white font-[family-name:var(--font-heading)] font-bold text-lg px-10 py-4 rounded-sm hover:opacity-90 transition-opacity"
+              className="inline-block bg-[var(--color-orange)] text-white font-[family-name:var(--font-heading)] font-bold text-lg px-12 py-4 rounded-full shadow-[0_0_0_4px_rgba(255,255,255,1),0_0_0_5px_var(--color-grey-light)] hover:shadow-[0_0_0_4px_rgba(255,255,255,1),0_0_0_6px_var(--color-orange)] hover:scale-[1.02] transition-all duration-200"
             >
               Start the Diagnostic
             </Link>
@@ -109,7 +114,14 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="px-6 py-6 border-t border-[var(--color-grey-light)]">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto flex flex-col items-center gap-3">
+          <Image
+            src="/aieutics_transparentbg_logo.png"
+            alt="Aieutics"
+            width={24}
+            height={24}
+            className="h-6 w-auto opacity-40"
+          />
           <p className="font-[family-name:var(--font-body)] text-xs text-[var(--color-grey)]">
             Developed by Aieutics from patterns observed across executive
             coaching, corporate accelerator programmes, and consulting

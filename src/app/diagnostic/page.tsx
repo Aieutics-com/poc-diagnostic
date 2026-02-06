@@ -9,6 +9,7 @@ import ProgressBar from "@/components/ProgressBar";
 import WizardStep from "@/components/WizardStep";
 import ResultsPage from "@/components/ResultsPage";
 import Link from "next/link";
+import Image from "next/image";
 import { Suspense } from "react";
 
 function DiagnosticContent() {
@@ -85,15 +86,18 @@ function DiagnosticContent() {
   return (
     <main className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="px-6 py-4 md:px-12 border-b border-[var(--color-grey-light)] no-print">
+      <header className="px-6 py-4 md:px-12 border-b border-[var(--color-grey-light)]">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
-          <Link
-            href="/"
-            className="font-[family-name:var(--font-heading)] text-lg font-bold tracking-tight hover:text-[var(--color-orange)] transition-colors"
-          >
-            aieutics
+          <Link href="/" className="hover:opacity-70 transition-opacity">
+            <Image
+              src="/aieutics_transparentbg_logo.png"
+              alt="Aieutics"
+              width={72}
+              height={72}
+              className="h-[4.5rem] w-auto"
+            />
           </Link>
-          <span className="font-[family-name:var(--font-heading)] text-sm text-[var(--color-grey)]">
+          <span className="font-[family-name:var(--font-heading)] text-xs text-[var(--color-grey)]">
             POC Lifecycle Diagnostic
           </span>
         </div>
@@ -123,12 +127,12 @@ function DiagnosticContent() {
                   onClick={goBack}
                   disabled={currentStep === 0}
                   className={`
-                    font-[family-name:var(--font-heading)] text-sm font-bold px-6 py-3 rounded-sm
-                    transition-all cursor-pointer
+                    font-[family-name:var(--font-heading)] text-sm font-bold px-8 py-3 rounded-full
+                    transition-all duration-200 cursor-pointer
                     ${
                       currentStep === 0
                         ? "text-[var(--color-grey-light)] cursor-not-allowed"
-                        : "text-[var(--color-grey)] hover:text-[var(--color-foreground)]"
+                        : "bg-[var(--color-white)] border border-[var(--color-grey-light)] text-[var(--color-grey)] shadow-sm hover:border-[var(--color-foreground)] hover:text-[var(--color-foreground)]"
                     }
                   `}
                 >
@@ -144,11 +148,11 @@ function DiagnosticContent() {
                   onClick={goNext}
                   disabled={!allCurrentAnswered}
                   className={`
-                    font-[family-name:var(--font-heading)] text-sm font-bold px-8 py-3 rounded-sm
-                    transition-all cursor-pointer
+                    font-[family-name:var(--font-heading)] text-sm font-bold px-10 py-3 rounded-full
+                    transition-all duration-200 cursor-pointer
                     ${
                       allCurrentAnswered
-                        ? "bg-[var(--color-orange)] text-white hover:opacity-90"
+                        ? "bg-[var(--color-orange)] text-white shadow-[0_0_0_3px_rgba(255,255,255,1),0_0_0_4px_var(--color-grey-light)] hover:shadow-[0_0_0_3px_rgba(255,255,255,1),0_0_0_5px_var(--color-orange)] hover:scale-[1.02]"
                         : "bg-[var(--color-grey-light)] text-[var(--color-grey)] cursor-not-allowed"
                     }
                   `}
@@ -170,8 +174,15 @@ function DiagnosticContent() {
       </div>
 
       {/* Footer */}
-      <footer className="px-6 py-4 border-t border-[var(--color-grey-light)] no-print">
-        <div className="max-w-3xl mx-auto text-center">
+      <footer className="px-6 py-4 border-t border-[var(--color-grey-light)]">
+        <div className="max-w-3xl mx-auto flex flex-col items-center gap-2">
+          <Image
+            src="/aieutics_transparentbg_logo.png"
+            alt="Aieutics"
+            width={20}
+            height={20}
+            className="h-5 w-auto opacity-40"
+          />
           <p className="font-[family-name:var(--font-body)] text-xs text-[var(--color-grey)]">
             See further. Think deeper. Break through. —{" "}
             <a

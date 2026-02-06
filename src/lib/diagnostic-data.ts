@@ -271,11 +271,11 @@ Each stage of the POC journey requires a different capability. Technical proof. 
   callout:
     "If your profile shows two or more dimensions in the red zone, a structured conversation can help you decide what to prioritise and what to walk away from.",
   contact: {
-    name: "Alexandra Najdanovic",
+    name: "Alexandra N.",
     title: "Founder, Aieutics",
     subtitle: "Executive coaching & strategic transformation",
     website: "aieutics.com",
-    email: "alexandra@aieutics.com",
+    email: "hello@aieutics.com",
   },
 };
 

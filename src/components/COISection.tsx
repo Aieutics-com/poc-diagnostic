@@ -34,7 +34,7 @@ export default function COISection({ results }: COISectionProps) {
         <p className="font-[family-name:var(--font-heading)] text-3xl font-bold text-[var(--color-orange)] mb-1">
           {totalNos}
         </p>
-        <p className="font-[family-name:var(--font-body)] text-sm text-[var(--color-grey)]">
+        <p className="font-[family-name:var(--font-body)] text-sm text-[var(--color-grey-light)]">
           unaddressed gaps in your current POC — each one a compounding risk.
         </p>
       </div>

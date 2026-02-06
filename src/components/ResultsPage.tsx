@@ -71,22 +71,22 @@ export default function ResultsPage({
       </div>
 
       {/* Action buttons */}
-      <div className="flex gap-3 mb-8 no-print">
+      <div className="flex gap-3 mb-8 no-print flex-wrap">
         <button
           onClick={handleShare}
-          className="px-4 py-2 text-sm font-bold font-[family-name:var(--font-heading)] border border-[var(--color-grey-light)] rounded-sm hover:border-[var(--color-orange)] hover:text-[var(--color-orange)] transition-colors cursor-pointer"
+          className="px-6 py-2.5 text-sm font-bold font-[family-name:var(--font-heading)] bg-[var(--color-white)] border border-[var(--color-grey-light)] rounded-full shadow-sm hover:border-[var(--color-orange)] hover:text-[var(--color-orange)] transition-all duration-200 cursor-pointer"
         >
           {copied ? "Link copied" : "Share results"}
         </button>
         <button
           onClick={handlePrint}
-          className="px-4 py-2 text-sm font-bold font-[family-name:var(--font-heading)] border border-[var(--color-grey-light)] rounded-sm hover:border-[var(--color-foreground)] transition-colors cursor-pointer"
+          className="px-6 py-2.5 text-sm font-bold font-[family-name:var(--font-heading)] bg-[var(--color-white)] border border-[var(--color-grey-light)] rounded-full shadow-sm hover:border-[var(--color-foreground)] transition-all duration-200 cursor-pointer"
         >
           Print / PDF
         </button>
         <button
           onClick={onRestart}
-          className="px-4 py-2 text-sm font-bold font-[family-name:var(--font-heading)] text-[var(--color-grey)] hover:text-[var(--color-foreground)] transition-colors cursor-pointer"
+          className="px-6 py-2.5 text-sm font-bold font-[family-name:var(--font-heading)] text-[var(--color-grey)] rounded-full hover:text-[var(--color-foreground)] hover:bg-[var(--color-grey-light)] transition-all duration-200 cursor-pointer"
         >
           Retake
         </button>
