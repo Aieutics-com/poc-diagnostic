@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POC Diagnostic — Results Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Almarai:wght@300;400;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ─── Reset & Tokens ──────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafafa;
+    --white: #ffffff;
+    --fg: #1a1a1a;
+    --orange: #FF5F1F;
+    --orange-soft: #FFE0D0;
+    --orange-vsoft: #FFF3EC;
+    --grey: #6b6b6b;
+    --grey-light: #e5e5e5;
+    --grey-lighter: #d0d0d0;
+    --tag-bg: #f5f5f5;
+    --green: #5a9a6e;
+    --amber: #d4943a;
+    --red: #ef4444;
+    --font-heading: 'Libre Baskerville', Georgia, serif;
+    --font-body: 'Almarai', Arial, sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+    --radius: 0.75rem;
+    --radius-lg: 1rem;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── Layout Shell ────────────────────────────── */
+  .page { min-height: 100vh; display: flex; flex-direction: column; }
+
+  header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--grey-light);
+  }
+  header .inner {
+    max-width: 42rem;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo-mark {
+    width: 3.5rem; height: 3.5rem;
+    border-radius: 50%;
+    background: var(--fg);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 700; font-size: 0.7rem;
+    color: var(--orange);
+    letter-spacing: 0.05em;
+  }
+  header .page-label {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    color: var(--grey);
+  }
+
+  .content {
+    flex: 1;
+    padding: 2rem 1.5rem;
+    max-width: 42rem;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--grey-light);
+    text-align: center;
+  }
+  footer .logo-sm {
+    width: 1.25rem; height: 1.25rem;
+    border-radius: 50%;
+    background: var(--fg);
+    opacity: 0.4;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 0.35rem; font-weight: 700;
+    color: var(--orange);
+    margin-bottom: 0.5rem;
+  }
+  footer p {
+    font-size: 0.75rem;
+    color: var(--grey);
+  }
+  footer a {
+    color: var(--orange);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  footer a:hover { text-decoration: underline; }
+
+  /* ─── Results Header ──────────────────────────── */
+  .results-label {
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--orange);
+    margin-bottom: 0.5rem;
+  }
+  .results-title {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .score-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+  }
+  .score-big {
+    font-family: var(--font-heading);
+    font-size: 4.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--orange);
+    line-height: 1;
+  }
+  .score-max {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--grey-lighter);
+  }
+  .score-note {
+    font-size: 1rem;
+    color: var(--grey);
+    margin-bottom: 2rem;
+  }
+
+  /* ─── Action Buttons ──────────────────────────── */
+  .actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-family: var(--font-heading);
+    font-size: 0.875rem;
+    font-weight: 700;
+    border: 1px solid var(--grey-light);
+    border-radius: var(--radius);
+    background: none;
+    color: var(--grey);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover {
+    border-color: var(--fg);
+    color: var(--fg);
+  }
+  .btn-ghost {
+    padding: 0.625rem 1.25rem;
+    font-family: var(--font-heading);
+    font-size: 0.875rem;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius);
+    background: none;
+    color: var(--grey);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover {
+    color: var(--fg);
+    background: var(--tag-bg);
+  }
+
+  /* ─── Two-Column Grid ─────────────────────────── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 640px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  /* ─── Radar Chart ─────────────────────────────── */
+  .radar-card {
+    border: 1px solid var(--grey-light);
+    border-radius: var(--radius);
+    background: var(--white);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 22rem;
+  }
+  .radar-svg { width: 100%; max-width: 320px; }
+  .radar-svg text {
+    font-family: var(--font-heading);
+    font-size: 10px;
+    fill: var(--grey);
+  }
+
+  /* ─── Dimension Bars ──────────────────────────── */
+  .dim-bars { display: flex; flex-direction: column; gap: 0; }
+  .dim-card {
+    border: 1px solid var(--grey-light);
+    border-radius: var(--radius);
+    background: var(--white);
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .dim-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+  .dim-name-group {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+  .status-dot {
+    width: 0.5rem; height: 0.5rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dim-name {
+    font-family: var(--font-heading);
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+  .dim-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .status-badge {
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.375rem;
+  }
+  .dim-score {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--grey);
+  }
+  .bar-track {
+    position: relative;
+    height: 0.375rem;
+    background: var(--grey-light);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    position: absolute;
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.7s ease-out;
+  }
+
+  /* ─── Section Headings ────────────────────────── */
+  .section-heading {
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  /* ─── Reflection Boxes ────────────────────────── */
+  .reflection-card {
+    position: relative;
+    border: 1px solid var(--grey-light);
+    border-radius: var(--radius);
+    background: var(--white);
+    padding: 1.25rem 1.25rem 1.25rem 1.75rem;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .reflection-accent {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0.25rem;
+    border-radius: var(--radius) 0 0 var(--radius);
+  }
+  .reflection-header {
+    font-family: var(--font-heading);
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .reflection-header .dot {
+    width: 0.625rem; height: 0.625rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .reflection-header .score-label {
+    font-weight: 400;
+    color: var(--grey);
+  }
+  .reflection-body {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+  .reflection-prompt {
+    font-size: 0.875rem;
+    font-style: italic;
+    color: var(--grey);
+  }
+
+  /* ─── Pattern Insight ─────────────────────────── */
+  .pattern-section { margin-top: 2rem; }
+  .pattern-card {
+    border: 1px solid var(--grey-light);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  .pattern-label {
+    font-family: var(--font-heading);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--orange);
+    margin-bottom: 0.5rem;
+  }
+  .pattern-desc {
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+
+  /* ─── COI Section ─────────────────────────────── */
+  .coi-section {
+    background: var(--fg);
+    color: var(--bg);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    margin-top: 2.5rem;
+    overflow: hidden;
+  }
+  .coi-heading {
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--orange);
+    margin-bottom: 1rem;
+  }
+  .coi-text {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--grey-light);
+    margin-bottom: 1rem;
+  }
+  .coi-divider {
+    border-top: 1px solid var(--grey);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+  }
+  .coi-number {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--orange);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+  .coi-caption {
+    font-size: 0.875rem;
+    color: var(--grey-light);
+  }
+
+  /* ─── CTA Section ─────────────────────────────── */
+  .cta-section { margin-top: 2.5rem; }
+  .cta-body {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  .cta-callout {
+    border: 1px solid var(--orange);
+    background: var(--orange-vsoft);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  .cta-callout p {
+    font-weight: 700;
+    line-height: 1.7;
+  }
+  .contact-card {
+    background: var(--white);
+    border: 1px solid var(--grey-light);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .contact-name {
+    font-family: var(--font-heading);
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  .contact-title, .contact-subtitle {
+    font-size: 0.875rem;
+    color: var(--grey);
+    margin-bottom: 0.25rem;
+  }
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  .contact-links a {
+    font-family: var(--font-heading);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--orange);
+    text-decoration: none;
+  }
+  .contact-links a:hover { text-decoration: underline; }
+
+  /* ─── Attribution ──────────────────────────────── */
+  .attribution {
+    font-size: 0.75rem;
+    color: var(--grey);
+    font-style: italic;
+    margin-top: 2rem;
+  }
+
+  /* ─── Modal Overlay ───────────────────────────── */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 26, 26, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    padding: 1.5rem;
+  }
+  .modal-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+  }
+  .modal-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 28rem;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.04);
+    transform: translateY(12px) scale(0.97);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+  }
+  .modal-backdrop.open .modal-card {
+    transform: translateY(0) scale(1);
+  }
+  .modal-inner {
+    padding: 2rem;
+  }
+  .modal-header-label {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.375rem;
+  }
+  .modal-header-sub {
+    font-size: 0.875rem;
+    color: var(--grey);
+    margin-bottom: 1.75rem;
+  }
+
+  /* Form fields */
+  .field { margin-bottom: 1.25rem; }
+  .field label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 0.375rem;
+  }
+  .field input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    border: 1px solid var(--grey-light);
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--fg);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .field input::placeholder {
+    color: var(--grey-lighter);
+  }
+  .field input:focus {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px rgba(255, 95, 31, 0.12);
+  }
+  .field input:disabled {
+    background: var(--tag-bg);
+    color: var(--grey);
+    cursor: not-allowed;
+  }
+
+  /* Error message */
+  .form-error {
+    font-size: 0.8rem;
+    color: var(--red);
+    margin-bottom: 1rem;
+    display: none;
+  }
+  .form-error.visible { display: block; }
+
+  /* Primary button */
+  .btn-primary {
+    width: 100%;
+    padding: 0.875rem;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--white);
+    background: var(--orange);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: box-shadow 0.3s, transform 0.2s, opacity 0.2s;
+    position: relative;
+  }
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: 0 0 30px rgba(255, 95, 31, 0.3);
+    transform: scale(1.01);
+  }
+  .btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  /* Pulse animation for loading */
+  @keyframes pulse-gentle {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+  .btn-primary.loading {
+    animation: pulse-gentle 1.5s ease-in-out infinite;
+  }
+
+  .cancel-link {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--grey);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .cancel-link:hover { color: var(--fg); }
+
+  /* ─── Success State ───────────────────────────── */
+  .success-view {
+    text-align: center;
+    padding: 1rem 0;
+    display: none;
+  }
+  .success-view.visible { display: block; }
+  .success-icon {
+    width: 3.5rem; height: 3.5rem;
+    border-radius: 50%;
+    background: rgba(90, 154, 110, 0.12);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+  .success-icon svg {
+    width: 1.5rem; height: 1.5rem;
+    color: var(--green);
+  }
+  .success-title {
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .success-text {
+    font-size: 0.875rem;
+    color: var(--grey);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  .success-text strong {
+    color: var(--fg);
+  }
+  .btn-done {
+    display: inline-block;
+    padding: 0.75rem 2.5rem;
+    font-family: var(--font-heading);
+    font-size: 0.875rem;
+    font-weight: 700;
+    border: 1px solid var(--grey-light);
+    border-radius: var(--radius);
+    background: none;
+    color: var(--fg);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-done:hover {
+    border-color: var(--fg);
+    background: var(--tag-bg);
+  }
+
+  .form-view { display: block; }
+  .form-view.hidden { display: none; }
+
+  /* ─── Prototype Controls ──────────────────────── */
+  .proto-controls {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #2a2a2a;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    z-index: 2000;
+    border-top: 2px solid var(--orange);
+  }
+  .proto-controls span {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #888;
+    margin-right: 0.5rem;
+  }
+  .proto-btn {
+    padding: 0.375rem 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    background: #3a3a3a;
+    color: #ccc;
+    border: 1px solid #555;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .proto-btn:hover {
+    background: #4a4a4a;
+    color: #fff;
+  }
+  .proto-btn.active {
+    background: var(--orange);
+    color: white;
+    border-color: var(--orange);
+  }
+
+  /* Bottom padding so content isn't hidden by controls */
+  .page { padding-bottom: 4rem; }
+
+  /* ─── Responsive ──────────────────────────────── */
+  @media (max-width: 640px) {
+    .results-title { font-size: 1.375rem; }
+    .score-big { font-size: 3.5rem; }
+    .score-max { font-size: 1.25rem; }
+    .modal-inner { padding: 1.5rem; }
+    .coi-section { padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <!-- ═══ Header ═══ -->
+  <header>
+    <div class="inner">
+      <div class="logo-mark">Ai</div>
+      <span class="page-label">POC Lifecycle Diagnostic</span>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- ═══ Score Header ═══ -->
+    <div style="margin-bottom: 2rem;">
+      <p class="results-label">Your Results</p>
+      <h2 class="results-title">POC Lifecycle Profile</h2>
+      <div class="score-row">
+        <span class="score-big">12</span>
+        <span class="score-max">/18</span>
+      </div>
+      <p class="score-note">This is a profile, not a grade. The pattern of your scores matters more than the total.</p>
+    </div>
+
+    <!-- ═══ Action Buttons ═══ -->
+    <div class="actions">
+      <button class="btn-outline" id="shareBtn" onclick="openModal()">Share results</button>
+      <button class="btn-outline">Print / PDF</button>
+      <button class="btn-ghost">Retake</button>
+    </div>
+
+    <!-- ═══ Two-Column: Radar + Dimension Bars ═══ -->
+    <div class="grid-2">
+      <!-- Radar Chart -->
+      <div class="radar-card">
+        <svg class="radar-svg" viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
+          <!-- Grid rings -->
+          <g transform="translate(150,140)">
+            <!-- Outer pentagon (100%) -->
+            <polygon points="0,-105 99.9,-32.4 61.8,84.9 -61.8,84.9 -99.9,-32.4" fill="none" stroke="#e5e5e5" stroke-width="1" stroke-dasharray="2 2"/>
+            <!-- 75% -->
+            <polygon points="0,-78.75 74.9,-24.3 46.3,63.7 -46.3,63.7 -74.9,-24.3" fill="none" stroke="#e5e5e5" stroke-width="0.75" stroke-dasharray="2 2"/>
+            <!-- 50% -->
+            <polygon points="0,-52.5 50,-16.2 30.9,42.5 -30.9,42.5 -50,-16.2" fill="none" stroke="#e5e5e5" stroke-width="0.75" stroke-dasharray="2 2"/>
+            <!-- 25% -->
+            <polygon points="0,-26.25 25,-8.1 15.5,21.2 -15.5,21.2 -25,-8.1" fill="none" stroke="#e5e5e5" stroke-width="0.75" stroke-dasharray="2 2"/>
+            <!-- Axis lines -->
+            <line x1="0" y1="0" x2="0" y2="-105" stroke="#e5e5e5" stroke-width="0.5"/>
+            <line x1="0" y1="0" x2="99.9" y2="-32.4" stroke="#e5e5e5" stroke-width="0.5"/>
+            <line x1="0" y1="0" x2="61.8" y2="84.9" stroke="#e5e5e5" stroke-width="0.5"/>
+            <line x1="0" y1="0" x2="-61.8" y2="84.9" stroke="#e5e5e5" stroke-width="0.5"/>
+            <line x1="0" y1="0" x2="-99.9" y2="-32.4" stroke="#e5e5e5" stroke-width="0.5"/>
+
+            <!-- Max outline (dashed) -->
+            <polygon points="0,-105 99.9,-32.4 61.8,84.9 -61.8,84.9 -99.9,-32.4" fill="none" stroke="#e5e5e5" stroke-width="1" stroke-dasharray="4 4"/>
+
+            <!-- Data polygon: PE 67%, SA 50%, GR 100%, CC 25%, DV 100% -->
+            <!-- PE: 0, -105*0.67 = 0, -70.35 -->
+            <!-- SA: 99.9*0.5, -32.4*0.5 = 49.95, -16.2 -->
+            <!-- GR: 61.8*1.0, 84.9*1.0 = 61.8, 84.9 -->
+            <!-- CC: -61.8*0.25, 84.9*0.25 = -15.45, 21.225 -->
+            <!-- DV: -99.9*1.0, -32.4*1.0 = -99.9, -32.4 -->
+            <polygon
+              points="0,-70.35 49.95,-16.2 61.8,84.9 -15.45,21.22 -99.9,-32.4"
+              fill="#FF5F1F" fill-opacity="0.12"
+              stroke="#FF5F1F" stroke-width="2"
+            />
+            <!-- Data points -->
+            <circle cx="0" cy="-70.35" r="3" fill="#FF5F1F"/>
+            <circle cx="49.95" cy="-16.2" r="3" fill="#FF5F1F"/>
+            <circle cx="61.8" cy="84.9" r="3" fill="#FF5F1F"/>
+            <circle cx="-15.45" cy="21.22" r="3" fill="#FF5F1F"/>
+            <circle cx="-99.9" cy="-32.4" r="3" fill="#FF5F1F"/>
+          </g>
+
+          <!-- Labels -->
+          <text x="150" y="18" text-anchor="middle">Problem</text>
+          <text x="150" y="30" text-anchor="middle">Economics</text>
+          <text x="268" y="112" text-anchor="start">Stakeholder</text>
+          <text x="268" y="124" text-anchor="start">Alignment</text>
+          <text x="228" y="240" text-anchor="middle">Governance</text>
+          <text x="228" y="252" text-anchor="middle">Readiness</text>
+          <text x="72" y="240" text-anchor="middle">Commercial</text>
+          <text x="72" y="252" text-anchor="middle">Conversion</text>
+          <text x="32" y="112" text-anchor="end">Delivery</text>
+          <text x="32" y="124" text-anchor="end">Viability</text>
+        </svg>
+      </div>
+
+      <!-- Dimension Bars -->
+      <div class="dim-bars">
+        <!-- Problem Economics: 2/3 amber -->
+        <div class="dim-card">
+          <div class="dim-header">
+            <div class="dim-name-group">
+              <span class="status-dot" style="background: var(--amber);"></span>
+              <span class="dim-name">Problem Economics</span>
+            </div>
+            <div class="dim-meta">
+              <span class="status-badge" style="color: var(--amber); background: rgba(212,148,58,0.12);">Partial</span>
+              <span class="dim-score">2/3</span>
+            </div>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width: 67%; background: var(--amber);"></div></div>
+        </div>
+
+        <!-- Stakeholder Alignment: 2/4 amber -->
+        <div class="dim-card">
+          <div class="dim-header">
+            <div class="dim-name-group">
+              <span class="status-dot" style="background: var(--amber);"></span>
+              <span class="dim-name">Stakeholder Alignment</span>
+            </div>
+            <div class="dim-meta">
+              <span class="status-badge" style="color: var(--amber); background: rgba(212,148,58,0.12);">Partial</span>
+              <span class="dim-score">2/4</span>
+            </div>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width: 50%; background: var(--amber);"></div></div>
+        </div>
+
+        <!-- Governance Readiness: 4/4 green -->
+        <div class="dim-card">
+          <div class="dim-header">
+            <div class="dim-name-group">
+              <span class="status-dot" style="background: var(--green);"></span>
+              <span class="dim-name">Governance Readiness</span>
+            </div>
+            <div class="dim-meta">
+              <span class="status-badge" style="color: var(--green); background: rgba(90,154,110,0.12);">Strong</span>
+              <span class="dim-score">4/4</span>
+            </div>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width: 100%; background: var(--green);"></div></div>
+        </div>
+
+        <!-- Commercial Conversion: 1/4 red -->
+        <div class="dim-card">
+          <div class="dim-header">
+            <div class="dim-name-group">
+              <span class="status-dot" style="background: var(--red);"></span>
+              <span class="dim-name">Commercial Conversion</span>
+            </div>
+            <div class="dim-meta">
+              <span class="status-badge" style="color: var(--red); background: rgba(239,68,68,0.12);">At Risk</span>
+              <span class="dim-score">1/4</span>
+            </div>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width: 25%; background: var(--red);"></div></div>
+        </div>
+
+        <!-- Delivery Viability: 3/3 green -->
+        <div class="dim-card">
+          <div class="dim-header">
+            <div class="dim-name-group">
+              <span class="status-dot" style="background: var(--green);"></span>
+              <span class="dim-name">Delivery Viability</span>
+            </div>
+            <div class="dim-meta">
+              <span class="status-badge" style="color: var(--green); background: rgba(90,154,110,0.12);">Strong</span>
+              <span class="dim-score">3/3</span>
+            </div>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width: 100%; background: var(--green);"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Reflections ═══ -->
+    <div style="margin-bottom: 2rem;">
+      <h3 class="section-heading">Areas Requiring Attention</h3>
+
+      <!-- Stakeholder Alignment -->
+      <div class="reflection-card">
+        <div class="reflection-accent" style="background: var(--amber);"></div>
+        <div class="reflection-header">
+          <span class="dot" style="background: var(--amber);"></span>
+          Stakeholder Alignment
+          <span class="score-label">— 2/4</span>
+        </div>
+        <p class="reflection-body">You're likely engaging with the wrong people. Complex organisations distribute pain, evaluation authority, and purchasing power across different roles — and the person championing your POC may control none of these.</p>
+        <p class="reflection-prompt">If you can't name all three, your POC is a technical demonstration, not a commercial validation.</p>
+      </div>
+
+      <!-- Commercial Conversion -->
+      <div class="reflection-card">
+        <div class="reflection-accent" style="background: var(--red);"></div>
+        <div class="reflection-header">
+          <span class="dot" style="background: var(--red);"></span>
+          Commercial Conversion
+          <span class="score-label">— 1/4</span>
+        </div>
+        <p class="reflection-body">You're at risk of the "successful pilot that goes nowhere." Users love it. Buyers haven't been engaged. ROI hasn't been agreed. There are no explicit criteria for what triggers a contract. This is where most POCs die.</p>
+        <p class="reflection-prompt">The people who use your product are not the people who sign your contract. Have you engaged both?</p>
+      </div>
+    </div>
+
+    <!-- ═══ Pattern Insight ═══ -->
+    <div class="pattern-section">
+      <h3 class="section-heading">Your Profile Pattern</h3>
+      <div class="pattern-card">
+        <p class="pattern-label">Strong Governance, weak Commercial Conversion</p>
+        <p class="pattern-desc">Structural support exists but no commercial viability proof. The sponsor and team are engaged, but there's no agreed ROI, no identified budget, no go/no-go criteria. The structure exists. The commercial logic doesn't.</p>
+      </div>
+    </div>
+
+    <!-- ═══ COI Section ═══ -->
+    <div class="coi-section">
+      <h3 class="coi-heading">The Cost of Ignoring</h3>
+      <p class="coi-text">Most founders calculate the return on their investment. Few calculate the COI — the Cost of Ignoring — what each unaddressed gap is quietly costing them.</p>
+      <p class="coi-text">Every "no" in this diagnostic is a compounding risk: one that gets more expensive the longer it goes unaddressed.</p>
+      <div class="coi-divider">
+        <p class="coi-number">6</p>
+        <p class="coi-caption">unaddressed gaps in your current POC — each one a compounding risk.</p>
+      </div>
+    </div>
+
+    <!-- ═══ CTA Section ═══ -->
+    <div class="cta-section">
+      <h3 class="section-heading">What This Diagnostic Doesn't Tell You</h3>
+      <p class="cta-body">This tool reveals where your POC is at risk. It doesn't tell you how to address those risks — because the answer depends on your specific context, your client, and where you are in the lifecycle.</p>
+      <p class="cta-body">Each stage of the POC journey requires a different capability. Technical proof. Commercial proof. Operational proof. Founders who are good at one stage are often stuck at the next — because it requires a completely different muscle.</p>
+
+      <div class="cta-callout">
+        <p>If your profile shows two or more dimensions in the red zone, a structured conversation can help you decide what to prioritise and what to walk away from.</p>
+      </div>
+
+      <div class="contact-card">
+        <p class="contact-name">Alexandra N.</p>
+        <p class="contact-title">Founder, Aieutics</p>
+        <p class="contact-subtitle">Executive coaching &amp; strategic transformation</p>
+        <div class="contact-links">
+          <a href="https://aieutics.com" target="_blank">aieutics.com</a>
+          <a href="mailto:hello@aieutics.com">hello@aieutics.com</a>
+        </div>
+      </div>
+
+      <p class="attribution">Developed by Aieutics from patterns observed across executive coaching, corporate accelerator programmes, and consulting engagements.</p>
+    </div>
+  </div>
+
+  <!-- ═══ Footer ═══ -->
+  <footer>
+    <div class="logo-sm">Ai</div>
+    <p>See further. Think deeper. Break through. — <a href="https://aieutics.com" target="_blank">aieutics.com</a></p>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ═══ SHARE MODAL ═══ -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-card">
+    <div class="modal-inner">
+
+      <!-- Form View -->
+      <div class="form-view" id="formView">
+        <h3 class="modal-header-label" id="modalTitle">Share Your Results</h3>
+        <p class="modal-header-sub">Send your POC diagnostic profile by email</p>
+
+        <div class="field">
+          <label for="nameInput">Your name</label>
+          <input type="text" id="nameInput" placeholder="e.g. Jean Dupont" required>
+        </div>
+
+        <div class="field">
+          <label for="emailInput">Email address</label>
+          <input type="email" id="emailInput" placeholder="name@company.com" required>
+        </div>
+
+        <div class="field">
+          <label for="pocInput">POC name</label>
+          <input type="text" id="pocInput" placeholder="e.g. DataFlow Analytics POC" required>
+        </div>
+
+        <p class="form-error" id="formError">Something went wrong. Please try again.</p>
+
+        <button class="btn-primary" id="sendBtn" onclick="handleSend()">Send Results</button>
+        <button class="cancel-link" onclick="closeModal()">Cancel</button>
+      </div>
+
+      <!-- Success View -->
+      <div class="success-view" id="successView">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <p class="success-title">Results sent!</p>
+        <p class="success-text">
+          Your diagnostic profile has been sent to <strong id="sentEmail">name@company.com</strong>.
+          <br>You'll also receive a copy at <strong>hello@aieutics.com</strong>.
+        </p>
+        <button class="btn-done" onclick="closeModal()">Done</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Prototype Controls ═══ -->
+<div class="proto-controls">
+  <span>PROTOTYPE</span>
+  <button class="proto-btn" onclick="openModal()">Open Modal</button>
+  <button class="proto-btn" onclick="showLoading()">Show Loading</button>
+  <button class="proto-btn" onclick="showSuccess()">Show Success</button>
+  <button class="proto-btn" onclick="showError()">Show Error</button>
+  <button class="proto-btn" onclick="resetForm()">Reset Form</button>
+  <button class="proto-btn" onclick="closeModal()">Close Modal</button>
+</div>
+
+<script>
+  const backdrop = document.getElementById('modalBackdrop');
+  const formView = document.getElementById('formView');
+  const successView = document.getElementById('successView');
+  const sendBtn = document.getElementById('sendBtn');
+  const nameInput = document.getElementById('nameInput');
+  const emailInput = document.getElementById('emailInput');
+  const pocInput = document.getElementById('pocInput');
+  const formError = document.getElementById('formError');
+  const sentEmail = document.getElementById('sentEmail');
+
+  function openModal() {
+    backdrop.classList.add('open');
+    nameInput.focus();
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    // Reset after transition
+    setTimeout(() => {
+      resetForm();
+    }, 300);
+  }
+
+  function resetForm() {
+    formView.classList.remove('hidden');
+    successView.classList.remove('visible');
+    formError.classList.remove('visible');
+    sendBtn.textContent = 'Send Results';
+    sendBtn.classList.remove('loading');
+    sendBtn.disabled = false;
+    nameInput.disabled = false;
+    emailInput.disabled = false;
+    pocInput.disabled = false;
+  }
+
+  function handleSend() {
+    // Validate
+    if (!nameInput.value || !emailInput.value || !pocInput.value) {
+      formError.textContent = 'Please fill in all fields.';
+      formError.classList.add('visible');
+      return;
+    }
+    if (!emailInput.value.includes('@')) {
+      formError.textContent = 'Please enter a valid email address.';
+      formError.classList.add('visible');
+      return;
+    }
+    formError.classList.remove('visible');
+    showLoading();
+    // Simulate send — in production this calls the API
+    setTimeout(() => {
+      showSuccess();
+    }, 1500);
+  }
+
+  function showLoading() {
+    formError.classList.remove('visible');
+    sendBtn.textContent = 'Sending...';
+    sendBtn.classList.add('loading');
+    sendBtn.disabled = true;
+    nameInput.disabled = true;
+    emailInput.disabled = true;
+    pocInput.disabled = true;
+  }
+
+  function showSuccess() {
+    sentEmail.textContent = emailInput.value || 'name@company.com';
+    formView.classList.add('hidden');
+    successView.classList.add('visible');
+    sendBtn.classList.remove('loading');
+  }
+
+  function showError() {
+    sendBtn.textContent = 'Send Results';
+    sendBtn.classList.remove('loading');
+    sendBtn.disabled = false;
+    nameInput.disabled = false;
+    emailInput.disabled = false;
+    pocInput.disabled = false;
+    formError.textContent = 'Something went wrong. Please try again.';
+    formError.classList.add('visible');
+  }
+
+  // Close on backdrop click
+  backdrop.addEventListener('click', function(e) {
+    if (e.target === backdrop) closeModal();
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && backdrop.classList.contains('open')) {
+      closeModal();
+    }
+  });
+</script>
+
+</body>
+</html>

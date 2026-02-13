@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Email Prototype — POC Diagnostic</title>
+<style>
+  /* Preview wrapper — not part of the email */
+  body { margin: 0; background: #d0d0d0; padding: 40px 20px; font-family: Arial, sans-serif; }
+  .preview-label {
+    max-width: 600px; margin: 0 auto 12px; font-family: 'Courier New', monospace;
+    font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .email-frame {
+    max-width: 600px; margin: 0 auto; background: #fafafa;
+    border-radius: 8px; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  }
+</style>
+</head>
+<body>
+
+<p class="preview-label">Email preview — as it appears in the inbox</p>
+
+<div class="email-frame">
+<!-- ═══════════════════════════════════════════ -->
+<!-- ACTUAL EMAIL HTML BELOW                     -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div style="margin: 0; padding: 0; background: #fafafa; font-family: Arial, Helvetica, sans-serif;">
+  <div style="max-width: 560px; margin: 0 auto; padding: 40px 24px;">
+
+    <!-- Header -->
+    <div style="margin-bottom: 32px;">
+      <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #FF5F1F; margin: 0 0 4px 0;">
+        POC Lifecycle Diagnostic
+      </p>
+      <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 11px; color: #6b6b6b; margin: 0;">
+        Results for DataFlow Analytics POC
+      </p>
+    </div>
+
+    <!-- Greeting -->
+    <div style="margin-bottom: 24px;">
+      <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 18px; font-weight: 700; color: #1a1a1a; margin: 0 0 12px 0;">
+        Hello Jean,
+      </p>
+      <p style="font-size: 14px; color: #6b6b6b; margin: 0; line-height: 1.6;">
+        Thank you for taking the POC Diagnostic!
+      </p>
+    </div>
+
+    <!-- Score -->
+    <div style="margin-bottom: 28px;">
+      <span style="font-family: Georgia, 'Times New Roman', serif; font-size: 54px; font-weight: 700; color: #FF5F1F; line-height: 1;">
+        12
+      </span>
+      <span style="font-family: Georgia, 'Times New Roman', serif; font-size: 22px; color: #d0d0d0;">
+        /18
+      </span>
+      <p style="font-size: 14px; color: #6b6b6b; margin: 12px 0 0 0; line-height: 1.6;">
+        This is a profile, not a grade. The pattern of your scores matters more than the total.
+      </p>
+    </div>
+
+    <!-- Pattern insight -->
+    <div style="margin-bottom: 24px;">
+      <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #1a1a1a; margin: 0 0 8px 0;">
+        Your Profile Pattern
+      </p>
+      <div style="border-left: 3px solid #FF5F1F; padding-left: 16px; margin-bottom: 4px;">
+        <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 14px; font-weight: 700; color: #FF5F1F; margin: 0 0 6px 0;">
+          Strong Governance, weak Commercial Conversion
+        </p>
+        <p style="font-size: 14px; color: #1a1a1a; margin: 0; line-height: 1.6;">
+          Structural support exists but no commercial viability proof. The sponsor and team are engaged, but there's no agreed ROI, no identified budget, no go/no-go criteria. The structure exists. The commercial logic doesn't.
+        </p>
+      </div>
+    </div>
+
+    <!-- Callout + CTA -->
+    <div style="background: #FFF3EC; border: 1px solid #FF5F1F; border-radius: 8px; padding: 20px; margin-bottom: 28px;">
+      <p style="font-size: 14px; font-weight: 700; color: #1a1a1a; margin: 0 0 16px 0; line-height: 1.6;">
+        If your profile shows two or more dimensions in the red zone, a structured conversation can help you decide what to prioritise and what to walk away from.
+      </p>
+      <a href="mailto:hello@aieutics.com?subject=POC%20Diagnostic%20%E2%80%94%20Follow-up" style="display: inline-block; padding: 10px 24px; background: #FF5F1F; color: #ffffff; font-family: Georgia, 'Times New Roman', serif; font-size: 13px; font-weight: 700; text-decoration: none; border-radius: 8px;">
+        Get in touch
+      </a>
+    </div>
+
+    <!-- Dimensions table -->
+    <div style="margin-bottom: 28px;">
+      <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #1a1a1a; margin: 0 0 12px 0;">
+        Your Results
+      </p>
+      <table style="width: 100%; border-collapse: collapse; background: #ffffff; border: 1px solid #e5e5e5; border-radius: 8px;">
+        <thead>
+          <tr style="background: #f5f5f5;">
+            <th style="padding: 10px 12px; text-align: left; font-family: Georgia, 'Times New Roman', serif; font-size: 12px; font-weight: 700; color: #1a1a1a; border-bottom: 1px solid #e5e5e5;">Dimension</th>
+            <th style="padding: 10px 12px; text-align: center; font-family: Georgia, 'Times New Roman', serif; font-size: 12px; font-weight: 700; color: #1a1a1a; border-bottom: 1px solid #e5e5e5;">Score</th>
+            <th style="padding: 10px 12px; text-align: center; font-family: Georgia, 'Times New Roman', serif; font-size: 12px; font-weight: 700; color: #1a1a1a; border-bottom: 1px solid #e5e5e5;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; font-family: Georgia, 'Times New Roman', serif; font-size: 14px;">Problem Economics</td>
+            <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; text-align: center; font-family: 'Courier New', monospace; font-size: 13px; color: #6b6b6b;">2/3</td>
+            <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; text-align: center;">
+              <span style="display: inline-block; padding: 2px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #d4943a; background: #d4943a1f;">Partial</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; font-family: Georgia, 'Times New Roman', serif; font-size: 14px;">Stakeholder Alignment</td>
+            <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; text-align: center; font-family: 'Courier New', monospace; font-size: 13px; color: #6b6b6b;">2/4</td>
+            <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; text-align: center;">
+              <span style="display: inline-block; padding: 2px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #d4943a; background: #d4943a1f;">Partial</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; font-family: Georgia, 'Times New Roman', serif; font-size: 14px;">Governance Readiness</td>
+            <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; text-align: center; font-family: 'Courier New', monospace; font-size: 13px; color: #6b6b6b;">4/4</td>
+            <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; text-align: center;">
+              <span style="display: inline-block; padding: 2px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #5a9a6e; background: #5a9a6e1f;">Strong</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; font-family: Georgia, 'Times New Roman', serif; font-size: 14px;">Commercial Conversion</td>
+            <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; text-align: center; font-family: 'Courier New', monospace; font-size: 13px; color: #6b6b6b;">1/4</td>
+            <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; text-align: center;">
+              <span style="display: inline-block; padding: 2px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #ef4444; background: #ef44441f;">At Risk</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 12px; font-family: Georgia, 'Times New Roman', serif; font-size: 14px;">Delivery Viability</td>
+            <td style="padding: 8px 12px; text-align: center; font-family: 'Courier New', monospace; font-size: 13px; color: #6b6b6b;">3/3</td>
+            <td style="padding: 8px 12px; text-align: center;">
+              <span style="display: inline-block; padding: 2px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #5a9a6e; background: #5a9a6e1f;">Strong</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- View full results -->
+    <div style="text-align: center; margin-bottom: 32px;">
+      <a href="#" style="display: inline-block; padding: 14px 32px; background: #FF5F1F; color: #ffffff; font-family: Georgia, 'Times New Roman', serif; font-size: 14px; font-weight: 700; text-decoration: none; border-radius: 12px;">
+        View Full Results
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <div style="border-top: 1px solid #e5e5e5; padding-top: 24px; text-align: center;">
+      <a href="https://aieutics.com" style="display: inline-block; margin-bottom: 12px;">
+        <img src="public/aieutics_transparentbg_logo.png" alt="Aieutics" width="120" style="width: 120px; height: auto;" />
+      </a>
+      <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 12px; color: #6b6b6b; margin: 0 0 4px 0;">
+        See further. Think deeper. Break through.
+      </p>
+      <a href="https://aieutics.com" style="font-size: 12px; color: #FF5F1F; text-decoration: none;">aieutics.com</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- END EMAIL HTML                              -->
+<!-- ═══════════════════════════════════════════ -->
+</div>
+
+</body>
+</html>

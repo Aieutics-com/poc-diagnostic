@@ -11,6 +11,7 @@ import ResultsPage from "@/components/ResultsPage";
 import Link from "next/link";
 import Image from "next/image";
 import { Suspense } from "react";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 function DiagnosticContent() {
   const searchParams = useSearchParams();
@@ -188,16 +189,18 @@ function DiagnosticContent() {
 
 export default function DiagnosticPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center">
-          <p className="font-[family-name:var(--font-heading)] text-sm text-[var(--color-grey)]">
-            Loading diagnostic...
-          </p>
-        </div>
-      }
-    >
-      <DiagnosticContent />
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center">
+            <p className="font-[family-name:var(--font-heading)] text-sm text-[var(--color-grey)]">
+              Loading diagnostic...
+            </p>
+          </div>
+        }
+      >
+        <DiagnosticContent />
+      </Suspense>
+    </ErrorBoundary>
   );
 }

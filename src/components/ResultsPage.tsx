@@ -9,8 +9,8 @@ import {
   shouldShowReflection,
 } from "@/lib/scoring";
 import type { Answers } from "@/lib/scoring";
-import { encodeAnswers } from "@/lib/share";
 import RadarChart from "./RadarChart";
+import ShareModal from "./ShareModal";
 import DimensionBar from "./DimensionBar";
 import ReflectionBox from "./ReflectionBox";
 import PatternInsight from "./PatternInsight";
@@ -34,16 +34,7 @@ export default function ResultsPage({
   const totalMax = getTotalMax(results);
   const redCount = getRedCount(results);
   const reflections = results.filter(shouldShowReflection);
-  const [copied, setCopied] = useState(false);
-
-  const handleShare = useCallback(() => {
-    const encoded = encodeAnswers(answers);
-    const url = `${window.location.origin}/diagnostic?r=${encoded}`;
-    navigator.clipboard.writeText(url).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  }, [answers]);
+  const [shareOpen, setShareOpen] = useState(false);
 
   const handlePrint = useCallback(() => {
     window.print();
@@ -76,10 +67,10 @@ export default function ResultsPage({
       {/* Action buttons */}
       <div className="flex gap-3 mb-8 no-print flex-wrap">
         <button
-          onClick={handleShare}
+          onClick={() => setShareOpen(true)}
           className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold font-[family-name:var(--font-heading)] border border-[var(--color-grey-light)] rounded-xl text-[var(--color-grey)] hover:text-[var(--color-foreground)] hover:border-[var(--color-foreground)] transition-all duration-200 cursor-pointer"
         >
-          {copied ? "Link copied" : "Share results"}
+          Share results
         </button>
         <button
           onClick={handlePrint}
@@ -134,6 +125,14 @@ export default function ResultsPage({
 
       {/* CTA */}
       <CTASection redCount={redCount} />
+
+      {/* Share modal */}
+      <ShareModal
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        results={results}
+        answers={answers}
+      />
     </div>
   );
 }
