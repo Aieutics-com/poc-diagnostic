@@ -16,6 +16,7 @@ import ReflectionBox from "./ReflectionBox";
 import PatternInsight from "./PatternInsight";
 import COISection from "./COISection";
 import CTASection from "./CTASection";
+import { track } from "@vercel/analytics";
 import { useCallback, useState } from "react";
 
 interface ResultsPageProps {
@@ -37,6 +38,7 @@ export default function ResultsPage({
   const [shareOpen, setShareOpen] = useState(false);
 
   const handlePrint = useCallback(() => {
+    track("print_pdf");
     window.print();
   }, []);
 

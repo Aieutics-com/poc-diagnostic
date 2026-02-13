@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import { track } from "@vercel/analytics";
 import type { DimensionResult } from "@/lib/diagnostic-data";
 import type { Answers } from "@/lib/scoring";
 import { encodeAnswers } from "@/lib/share";
@@ -115,6 +116,7 @@ export default function ShareModal({
         throw new Error("Send failed");
       }
 
+      track("email_shared");
       setState("success");
     } catch {
       setErrorMsg("Something went wrong. Please try again.");

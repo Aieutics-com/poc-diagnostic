@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback, useEffect, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "next/navigation";
+import { track } from "@vercel/analytics";
 import { DIMENSIONS } from "@/lib/diagnostic-data";
 import { scoreAll, type Answers } from "@/lib/scoring";
 import { decodeAnswers } from "@/lib/share";
@@ -18,6 +19,7 @@ function DiagnosticContent() {
   const [answers, setAnswers] = useState<Answers>({});
   const [currentStep, setCurrentStep] = useState(0);
   const [showResults, setShowResults] = useState(false);
+  const hasTrackedStart = useRef(false);
 
   // Decode shared results from URL
   useEffect(() => {
@@ -28,6 +30,9 @@ function DiagnosticContent() {
         setAnswers(decoded);
         setShowResults(true);
       }
+    } else if (!hasTrackedStart.current) {
+      track("diagnostic_started");
+      hasTrackedStart.current = true;
     }
   }, [searchParams]);
 
@@ -49,6 +54,7 @@ function DiagnosticContent() {
       setCurrentStep((prev) => prev + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
+      track("diagnostic_completed");
       setShowResults(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
