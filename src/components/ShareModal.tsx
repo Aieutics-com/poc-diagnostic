@@ -206,6 +206,10 @@ export default function ShareModal({
                 />
               </div>
 
+              <p className="text-[0.7rem] text-[var(--color-grey)] leading-relaxed mb-5">
+                Your name and email are used solely to send your diagnostic results. We don&apos;t store your personal data.
+              </p>
+
               {showError && (
                 <p className="text-[0.8rem] text-[var(--color-red)] mb-4">
                   {errorMsg}
