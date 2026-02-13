@@ -36,6 +36,22 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
 
+/* Hero text-focus-in */
+@keyframes text-focus-in {
+  0%   { filter: blur(12px); opacity: 0; }
+  100% { filter: blur(0);    opacity: 1; }
+}
+
+.animate-text-focus-in {
+  animation: text-focus-in 0.9s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+}
+
+/* Toggle ripple */
+@keyframes ripple-expand {
+  0%   { transform: scale(0); opacity: 0.45; }
+  100% { transform: scale(2);  opacity: 0; }
+}
+
 /* Recharts tooltip override */
 .recharts-default-tooltip {
   font-family: var(--font-body) !important;

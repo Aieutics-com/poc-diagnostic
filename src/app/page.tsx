@@ -27,7 +27,7 @@ export default function Home() {
         <HeroVideo />
 
         <div className="max-w-2xl mx-auto text-center relative z-10">
-          <h1 className="font-[family-name:var(--font-heading)] text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white">
+          <h1 className="font-[family-name:var(--font-heading)] text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white animate-text-focus-in">
             POC Lifecycle
             <br />
             <span className="text-[var(--color-orange)]">Diagnostic</span>
