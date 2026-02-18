@@ -177,15 +177,10 @@ function DiagnosticContent() {
             className="h-5 w-auto opacity-40"
           />
           <p className="font-[family-name:var(--font-body)] text-xs text-[var(--color-grey)]">
-            See further. Think deeper. Break through. —{" "}
-            <a
-              href="https://aieutics.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[var(--color-orange)] transition-colors"
-            >
-              aieutics.com
-            </a>
+            Built by{" "}
+            <a href="https://www.aieutics.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--color-orange)] transition-colors">Aieutics</a>.
+            These tools are starting points. If your results raise questions,{" "}
+            <a href="https://www.aieutics.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--color-orange)] transition-colors">let&apos;s talk</a>.
           </p>
         </div>
       </footer>
