@@ -4,8 +4,15 @@ import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { track } from "@vercel/analytics";
 import { DIMENSIONS } from "@/lib/diagnostic-data";
-import { scoreAll, type Answers } from "@/lib/scoring";
-import { decodeAnswers } from "@/lib/share";
+import {
+  scoreAll,
+  getMatchingPatterns,
+  getTotalScore,
+  getTotalMax,
+  getRedCount,
+  type Answers,
+} from "@/lib/scoring";
+import { decodeAnswers, encodeAnswers } from "@/lib/share";
 import ProgressBar from "@/components/ProgressBar";
 import WizardStep from "@/components/WizardStep";
 import ResultsPage from "@/components/ResultsPage";
@@ -19,7 +26,9 @@ function DiagnosticContent() {
   const [answers, setAnswers] = useState<Answers>({});
   const [currentStep, setCurrentStep] = useState(0);
   const [showResults, setShowResults] = useState(false);
+  const [notionPageId, setNotionPageId] = useState<string | null>(null);
   const hasTrackedStart = useRef(false);
+  const isSharedView = useRef(false);
 
   // Decode shared results from URL
   useEffect(() => {
@@ -29,6 +38,7 @@ function DiagnosticContent() {
       if (decoded) {
         setAnswers(decoded);
         setShowResults(true);
+        isSharedView.current = true;
       }
     } else if (!hasTrackedStart.current) {
       track("diagnostic_started");
@@ -57,8 +67,38 @@ function DiagnosticContent() {
       track("diagnostic_completed");
       setShowResults(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
+
+      // Submit to Notion (fire-and-forget)
+      const resultsData = scoreAll(answers);
+      const encoded = encodeAnswers(answers);
+      const allQuestionIds = DIMENSIONS.flatMap((d) => d.questions.map((q) => q.id));
+      fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tool: "POC Lifecycle",
+          answers,
+          questionCount: allQuestionIds.length,
+          dimensions: resultsData.map((r) => ({
+            name: r.dimension.name,
+            score: r.score,
+            maxScore: r.maxScore,
+            status: r.status,
+          })),
+          patterns: getMatchingPatterns(resultsData).map((p) => p.id),
+          totalScore: getTotalScore(resultsData),
+          totalMax: getTotalMax(resultsData),
+          redCount: getRedCount(resultsData),
+          encodedAnswers: encoded,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.pageId) setNotionPageId(data.pageId);
+        })
+        .catch(() => {});
     }
-  }, [currentStep]);
+  }, [currentStep, answers]);
 
   const goBack = useCallback(() => {
     if (currentStep > 0) {
@@ -71,6 +111,8 @@ function DiagnosticContent() {
     setAnswers({});
     setCurrentStep(0);
     setShowResults(false);
+    setNotionPageId(null);
+    isSharedView.current = false;
     window.history.replaceState({}, "", "/diagnostic");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -161,6 +203,7 @@ function DiagnosticContent() {
               results={results}
               answers={answers}
               onRestart={handleRestart}
+              notionPageId={notionPageId}
             />
           )}
         </div>

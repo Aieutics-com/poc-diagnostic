@@ -12,6 +12,7 @@ interface ShareModalProps {
   onClose: () => void;
   results: DimensionResult[];
   answers: Answers;
+  notionPageId: string | null;
 }
 
 type ModalState = "form" | "loading" | "success" | "error";
@@ -21,6 +22,7 @@ export default function ShareModal({
   onClose,
   results,
   answers,
+  notionPageId,
 }: ShareModalProps) {
   const [state, setState] = useState<ModalState>("form");
   const [name, setName] = useState("");
@@ -118,11 +120,26 @@ export default function ShareModal({
 
       track("email_shared");
       setState("success");
+
+      // Update Notion record with contact details (fire-and-forget)
+      if (notionPageId) {
+        fetch("/api/submit/update", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            pageId: notionPageId,
+            name: name.trim(),
+            email: email.trim(),
+            projectName: pocName.trim(),
+            shareUrl,
+          }),
+        }).catch(() => {});
+      }
     } catch {
       setErrorMsg("Something went wrong. Please try again.");
       setState("error");
     }
-  }, [name, email, pocName, answers, results]);
+  }, [name, email, pocName, answers, results, notionPageId]);
 
   const isLoading = state === "loading";
   const isSuccess = state === "success";
@@ -209,7 +226,7 @@ export default function ShareModal({
               </div>
 
               <p className="text-[0.7rem] text-[var(--color-grey)] leading-relaxed mb-5">
-                Your name and email are used solely to send your diagnostic results. We don&apos;t store your personal data.
+                Your name and email are stored securely to deliver your results and help us improve the diagnostic.
               </p>
 
               {showError && (
